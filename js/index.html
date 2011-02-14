@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>AtTask!</title>
+	<script src="mootools-core.js" type="text/javascript" charset="utf-8"></script>
+	<script src="mootools-more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="AtTaskAPI.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		window.addEvent('domready', function() {					
+			var api = new AtTaskAPI();
+			
+			var userID;
+			var sessionID;
+			var user;
+			
+			api.login("admin", "user", function(response, fail) {
+				if(response) {
+					userID = response.userID;
+					sessionID = response.sessionID;
+					
+					
+					api.get('proj', '4d3deb66000002806934d2f50447e3ef', null, null, function(response, fail) {
+						console.log(JSON.stringify(response));
+					});
+					
+					api.get('user', userID, null, ['ID', 'homeGroupID', 'emailAddr'], function(response, fail) {
+						user = response;
+						
+						api.search('proj', {'groupID': user.homeGroupID }, ['ID', 'name', 'description'], function(response, fail) {
+							console.log(JSON.stringify(response));
+						});
+					});			
+							
+				}
+			});
+		});
+		
+	</script>
+</head>
+
+<body>
+
+
+</body>
+</html>
