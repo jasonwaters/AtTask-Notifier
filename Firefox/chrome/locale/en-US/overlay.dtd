@@ -9,3 +9,27 @@
 
 <!ENTITY at-notifier-tooltip-login.label "Click to log in.">
 <!ENTITY at-notifier-tooltip-logged-in-as.label "Logged in as ">
+
+
+<!-- Login window -->
+<!ENTITY notifier-login.title "Please Log in to AtTask">
+
+<!ENTITY notifier-login-username.label "Username:">
+
+<!ENTITY notifier-login-password.label "Password:">
+<!ENTITY notifier-login-remember-password.label "Remember password.">
+
+<!ENTITY notifier-login-button-login.label "Login">
+
+<!-- Context Menu -->
+<!ENTITY gm-notifier-context-menu-prefs.label "Preferences">
+
+<!ENTITY gm-notifier-context-menu-logout.label "Log Out">
+
+<!ENTITY gm-notifier-context-menu-checknow.label "Check Now">
+
+<!ENTITY gm-notifier-context-menu-showstatusbar.label "Show Statusbar Item">
+
+<!ENTITY gm-notifier-context-menu-uninstall.label "Uninstall">
+
+<!ENTITY gm-notifier-context-menu-accounts.label "Accounts">
