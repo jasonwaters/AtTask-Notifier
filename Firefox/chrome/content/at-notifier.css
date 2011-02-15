@@ -1,0 +1,21 @@
+/* statusbar stuff */
+#at-notifier-statusbar {
+  -moz-binding: url('chrome://attasknotify/content/at-notifier.xml#statusbarpanel-iconic-text');
+  list-style-image: url("chrome://attasknotify/content/attask-sm.png");
+}
+
+#at-notifier-statusbar[newNotifications="true"] .statusbarpanel-icon {
+  list-style-image: url("chrome://attasknotify/content/attask-sm-new.png");
+}
+
+#at-notifier-statusbar[logged-in="false"] {
+  list-style-image: url("chrome://attasknotify/content/attask-sm-disabled.png");
+}
+
+#at-notifier-statusbar[logged-in="true"] > .statusbarpanel-text {
+  margin: 0 0 0 4px;
+}
+
+#at-notifier-statusbar[logged-in="false"] > .statusbarpanel-text {
+  margin: 0px !important;
+}

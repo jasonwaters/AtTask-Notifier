@@ -1,0 +1,7 @@
+content   attasknotify                 chrome/content/
+skin      attasknotify   classic/1.0   chrome/skin/
+locale    attasknotify   en-US         chrome/locale/en-US/
+
+
+overlay   chrome://browser/content/browser.xul   chrome://attasknotify/content/ff-overlay.xul
+style chrome://global/content/customizeToolbar.xul chrome://attasknotify/skin/overlay.css
