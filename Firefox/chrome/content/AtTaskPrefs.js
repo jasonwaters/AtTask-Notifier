@@ -1,9 +1,10 @@
 var AtTaskPrefs = {
-
-    PREF_UPDATE_INTERVAL: "at-notify.update.interval",
-    PREF_REMEMBER_PASSWORD: "at-notify.remember.password",
-    PREF_AUTOLOGIN_ENABLED: true,
-
+	PREF_GATEWAY: 'extensions.attasknotify.gatewayURL',
+	PREF_USERNAME: 'extensions.attasknotify.username',
+	PREF_REMEMBER: 'extensions.attasknotify.remember-password',
+	
+	prefBranch: null,
+	
     getPrefBranch: function() {
         if (!this.prefBranch) {
             this.prefBranch = Components.classes['@mozilla.org/preferences-service;1'].getService();
@@ -12,6 +13,48 @@ var AtTaskPrefs = {
 
         return this.prefBranch;
     },
+	
+	storePassword: function(username, password) {
+		var url = "chrome://attasknotify/";
+		
+		var passwordManager = Components.classes["@mozilla.org/login-manager;1"].getService(Components.interfaces.nsILoginManager);
+		
+		var passwords = passwordManager.findLogins({},url, null, "at-notifier");
+		if (passwords.length > 0) {
+		    for (var i = 0; i < passwords.length; i++) {
+		        if (passwords[i].username == username) {
+		            passwordManager.removeLogin(passwords[i]);
+		            break;
+		        }
+		    }
+		}
+
+		var logininfo = Components.classes["@mozilla.org/login-manager/loginInfo;1"].createInstance(Components.interfaces.nsILoginInfo);
+
+		if (password) {
+		    logininfo.init(url, null, "at-notifier", username, password, "", "");
+		    passwordManager.addLogin(logininfo);
+		} else {
+		    // if we don't store the password, we store the user name only
+		    // XXX: FF3 doesn't allow empty/null names - using " ", need to reconsider
+		    logininfo.init(url, null, "at-notifier", username, " ", "", "");
+		    passwordManager.addLogin(logininfo);
+		}
+	},
+	
+	retrievePassword: function(username) {
+		var url = "chrome://attasknotify/";
+		var passwordManager = Components.classes["@mozilla.org/login-manager;1"].getService(Components.interfaces.nsILoginManager);
+		var passwords = passwordManager.findLogins({},url, null, "at-notifier");
+		if (passwords.length > 0) {
+		    for (var i = 0; i < passwords.length; i++) {
+		        if (passwords[i].username == username) {
+		            return passwords[i].password;
+		        }
+		    }
+		}
+		return null;
+	},
 
     setBoolPref: function(aName, aValue) {
         try {
@@ -40,8 +83,7 @@ var AtTaskPrefs = {
 
         try {
             rv = this.getPrefBranch().getIntPref(aName);
-        } catch(e) {
-            }
+        } catch(e) {}
 
         return rv;
     },
@@ -55,61 +97,31 @@ var AtTaskPrefs = {
 
         try {
             rv = this.getPrefBranch().getCharPref(aName);
-        } catch(e) {
-
-            }
+        } catch(e) {}
 
         return rv;
     },
 
-    addObserver: function(aDomain, aFunction) {
-        var myPrefs = this.getPrefBranch();
-        var prefBranchInternal = myPrefs.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-
-        if (prefBranchInternal)
-        prefBranchInternal.addObserver(aDomain, aFunction, false);
-    },
-
-    removeObserver: function(aDomain, aFunction) {
-        var myPrefs = this.getPrefBranch();
-        var prefBranchInternal = myPrefs.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
-
-        if (prefBranchInternal)
-        prefBranchInternal.removeObserver(aDomain, aFunction);
-    },
-
-    initPrefs: function() {
-        // migrate preferences
-        var arePrefsUpToDate = this.getBoolPref(this.PREF_NOTIFICATIONS_REPEAT);
-        if (arePrefsUpToDate == null) {
-            // set prefs if they don't exit
-            this.initPref(this.PREF_UPDATE_INTERVAL, "int", 10);
-            this.initPref(this.PREF_REMEMBER_PASSWORD, "bool", false);
-            this.initPref(this.PREF_AUTOLOGIN_ENABLED, "bool", false);
-        }
-    },
-
-
     initPref: function(aPrefName, aPrefType, aDefaultValue) {
         var prefExists;
         switch (aPrefType) {
-        case "bool":
-            prefExists = this.getBoolPref(aPrefName);
-            if (prefExists == null)
-            this.setBoolPref(aPrefName, aDefaultValue);
-            break;
+        	case "bool":
+	            prefExists = this.getBoolPref(aPrefName);
+	            if (prefExists == null)
+	            this.setBoolPref(aPrefName, aDefaultValue);
+	            break;
 
-        case "int":
-            prefExists = this.getIntPref(aPrefName);
-            if (prefExists == null)
-            this.setIntPref(aPrefName, aDefaultValue);
-            break;
+	        case "int":
+	            prefExists = this.getIntPref(aPrefName);
+	            if (prefExists == null)
+	            this.setIntPref(aPrefName, aDefaultValue);
+	            break;
 
-        case "char":
-            prefExists = this.getCharPref(aPrefName);
-            if (prefExists == null)
-            this.setCharPref(aPrefName, aDefaultValue);
-            break;
+	        case "char":
+	            prefExists = this.getCharPref(aPrefName);
+	            if (prefExists == null)
+	            this.setCharPref(aPrefName, aDefaultValue);
+	            break;
         }
     },
 
@@ -118,8 +130,7 @@ var AtTaskPrefs = {
 
         try {
             rv = this.getPrefBranch().clearUserPref(aPrefName);
-        } catch(e) {
-            }
+        } catch(e) {}
 
         return rv;
     }

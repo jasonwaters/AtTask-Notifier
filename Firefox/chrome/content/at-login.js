@@ -1,31 +1,44 @@
-const kPSWDMANAGER_CONTRACTID = "@mozilla.org/passwordmanager;1";
-const nsIPasswordManager = Components.interfaces.nsIPasswordManager;
-
-var gPasswordArray = new Array();
-
 function onLoad() {
-
-
+	document.getElementById("gateway").value = window.opener.AtTaskPrefs.getCharPref(window.opener.AtTaskPrefs.PREF_GATEWAY);
+	document.getElementById("username").value = window.opener.AtTaskPrefs.getCharPref(window.opener.AtTaskPrefs.PREF_USERNAME);
+	document.getElementById("store-password").checked = window.opener.AtTaskPrefs.getBoolPref(window.opener.AtTaskPrefs.PREF_REMEMBER);
+	
+	if(window.opener.AtTaskPrefs.getBoolPref(window.opener.AtTaskPrefs.PREF_REMEMBER) && window.opener.AtTaskPrefs.getCharPref(window.opener.AtTaskPrefs.PREF_USERNAME) != null && window.opener.AtTaskPrefs.getCharPref(window.opener.AtTaskPrefs.PREF_USERNAME).length > 0) {
+		var password = window.opener.AtTaskPrefs.retrievePassword(window.opener.AtTaskPrefs.getCharPref(window.opener.AtTaskPrefs.PREF_USERNAME));
+		if(password != null)
+			document.getElementById("password").value = password;
+	}
 }
 
 function onAccept() {
+	setStatus("", "Logging in...");
+
+	window.opener.AtTaskPrefs.setBoolPref(window.opener.AtTaskPrefs.PREF_REMEMBER, document.getElementById("store-password").checked);
+	window.opener.AtTaskPrefs.setCharPref(window.opener.AtTaskPrefs.PREF_GATEWAY, document.getElementById("gateway").value);
+	window.opener.AtTaskPrefs.setCharPref(window.opener.AtTaskPrefs.PREF_USERNAME, document.getElementById("username").value);
+
+	if(document.getElementById("store-password").checked) {
+		window.opener.AtTaskPrefs.storePassword(document.getElementById("username").value, document.getElementById("password").value);
+	}
+	
 	window.opener.AtTaskNotifier.initLogin(document.getElementById("gateway").value, document.getElementById("username").value, document.getElementById("password").value);
-	
-	// remember login pref
-  	// window.opener.AtTaskNotifier.wm_prefs.setBoolPref("gm-notifier.users.remember-password", document.getElementById("store-password").checked);
-	
+
 	return false;
 }
 
-function setStatus(status) {
+function setStatus(status, message) {
+	
+	if(message != null)
+		document.getElementById("status").label = message;
 	
 	switch(status) {
 		case "success":
 			window.opener.AtTaskNotifier.login_window = null;
-			window.close();
+      		setTimeout("window.close()", 1000);
+			break;
+		case "fail":
 			break;
 	}
-	
 }
 
 

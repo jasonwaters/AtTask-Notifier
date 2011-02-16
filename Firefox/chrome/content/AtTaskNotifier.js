@@ -30,12 +30,12 @@ var AtTaskNotifier = {
 
 	onLoginResult: function(response, fail) {
 		if(response) {
-			this.login_window.setStatus("success");
+			this.login_window.setStatus("success", "Logged in.");
 			this.updateLabelsAndIcons();
 			this.refresh();
 			this.startUpdateInterval();
 		}else{
-			alert("error! " + fail);
+			this.login_window.setStatus("fail", "Unable to log in.");
 		}
 	},
 
