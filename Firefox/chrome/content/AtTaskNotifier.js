@@ -8,6 +8,19 @@ var AtTaskNotifier = {
 	onLoad: function() {
 		this.initialized = true;
 		this.updateLabelsAndIcons();
+		
+		//check if a username and password are stored.  If so, auto log in
+		var gateway = AtTaskPrefs.getCharPref(AtTaskPrefs.PREF_GATEWAY);
+		var username = AtTaskPrefs.getCharPref(AtTaskPrefs.PREF_USERNAME);
+		var rememberPassword = AtTaskPrefs.getBoolPref(AtTaskPrefs.PREF_REMEMBER);
+		
+		if(gateway != null && gateway.length > 0 && username != null && username.length > 0 && rememberPassword) {
+			var password = AtTaskPrefs.retrievePassword(username);
+			if(password != null) {
+				this.initLogin(gateway, username, password);
+			}
+		}
+		
 	},
 	login: function(event) {
 	    if (event && event.button == 2) {
@@ -30,13 +43,18 @@ var AtTaskNotifier = {
 
 	onLoginResult: function(response, fail) {
 		if(response) {
-			this.login_window.setStatus("success", "Logged in.");
+			this.setLoginStatus("success", "Logged in.");
 			this.updateLabelsAndIcons();
 			this.refresh();
 			this.startUpdateInterval();
 		}else{
-			this.login_window.setStatus("fail", "Unable to log in.");
+			this.setLoginStatus("fail", "Unable to log in.");
 		}
+	},
+	
+	setLoginStatus: function(status, message) {
+		if(this.login_window != null)
+			this.login_window.setStatus(status, message);	
 	},
 
 	startUpdateInterval: function() {

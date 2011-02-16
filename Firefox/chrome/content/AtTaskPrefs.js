@@ -31,13 +31,9 @@ var AtTaskPrefs = {
 
 		var logininfo = Components.classes["@mozilla.org/login-manager/loginInfo;1"].createInstance(Components.interfaces.nsILoginInfo);
 
+		//if password is null, then no password will be stored, and the old one (if any) will be removed.
 		if (password) {
 		    logininfo.init(url, null, "at-notifier", username, password, "", "");
-		    passwordManager.addLogin(logininfo);
-		} else {
-		    // if we don't store the password, we store the user name only
-		    // XXX: FF3 doesn't allow empty/null names - using " ", need to reconsider
-		    logininfo.init(url, null, "at-notifier", username, " ", "", "");
 		    passwordManager.addLogin(logininfo);
 		}
 	},

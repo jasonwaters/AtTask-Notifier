@@ -19,6 +19,8 @@ function onAccept() {
 
 	if(document.getElementById("store-password").checked) {
 		window.opener.AtTaskPrefs.storePassword(document.getElementById("username").value, document.getElementById("password").value);
+	}else {
+		window.opener.AtTaskPrefs.storePassword(document.getElementById("username").value, null);
 	}
 	
 	window.opener.AtTaskNotifier.initLogin(document.getElementById("gateway").value, document.getElementById("username").value, document.getElementById("password").value);
@@ -27,7 +29,6 @@ function onAccept() {
 }
 
 function setStatus(status, message) {
-	
 	if(message != null)
 		document.getElementById("status").label = message;
 	
