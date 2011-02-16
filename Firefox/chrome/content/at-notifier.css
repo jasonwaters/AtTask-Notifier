@@ -5,7 +5,7 @@
 }
 
 #at-notifier-statusbar[newNotifications="true"] .statusbarpanel-icon {
-  list-style-image: url("chrome://attasknotify/content/attask-sm-new.png");
+  list-style-image: url("chrome://attasknotify/content/notifications.png");
 }
 
 #at-notifier-statusbar[logged-in="false"] {
