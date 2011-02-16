@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://attasknotify/skin/at-notifier.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://attasknotify/locale/messages.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="attasknotify-overlay">
+	<script src="globals.js"/>
+	<script src="AtTaskAPI.js"/>
+	<script src="AtTaskNotifier.js"/>
+	<script src="AtTaskPrefs.js"/>
+	<stringbundle id="AtTaskStrings" src="chrome://attasknotify/locale/messages.properties"/>
+	<statusbar id="status-bar">
+		<statusbarpanel id="at-notifier-statusbar" label="" onclick="AtTaskNotifier.login(event)" logged-in="false" newNotifications="false"  insertafter="statusbar-resizerpanel"/>
+	</statusbar>
+</overlay>
