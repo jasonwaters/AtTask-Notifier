@@ -8,7 +8,6 @@
     <em:creator>Jason Waters</em:creator>
     <em:contributor>Jared Neilsen</em:contributor>
     <em:aboutURL>chrome://attasknotify/content/about.xul</em:aboutURL>
-    <em:optionsURL>chrome://attasknotify/content/options.xul</em:optionsURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- Firefox -->
