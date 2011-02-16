@@ -5,9 +5,7 @@
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="attasknotify-overlay">
 	<script src="overlay.js"/>
 	<script src="ff-overlay.js"/>
-	<stringbundleset id="stringbundleset">
-		<stringbundle id="attasknotify-strings" src="chrome://attasknotify/locale/overlay.properties"/>
-	</stringbundleset>
+	<stringbundle id="AtTaskStrings" src="chrome://attasknotify/locale/overlay.properties"/>
 	<statusbar id="status-bar">
 		<statusbarpanel id="at-notifier-statusbar" label="" onclick="AtTaskNotifier.login(event)" logged-in="false" newNotifications="false"  insertafter="statusbar-resizerpanel"/>
 	</statusbar>

@@ -1,16 +1,3 @@
-<!ENTITY attasknotify.label "Your localized menuitem">
-<!ENTITY attasknotifyContext.label "Your Menuitem">
-<!ENTITY attasknotifyContext.accesskey "Y">
-<!ENTITY attasknotifyToolbarButton.label "Your Toolbar Button">
-<!ENTITY attasknotifyToolbarButton.tooltip "This is your toolbar button!">
-<!ENTITY attasknotifySidebar.label "Your Sidebar">
-<!ENTITY attasknotifyToolbar.name  "example">
-<!ENTITY attasknotifyToolbar.label "This is an example toolbar. You can hide it under View &gt; toolbars &gt; &attasknotifyToolbar.name;">
-
-<!ENTITY at-notifier-tooltip-login.label "Click to log in.">
-<!ENTITY at-notifier-tooltip-logged-in-as.label "Logged in as ">
-
-
 <!-- Login window -->
 <!ENTITY notifier-login.title "Please Log in to AtTask">
 

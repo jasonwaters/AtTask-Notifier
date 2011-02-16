@@ -48,13 +48,15 @@ var AtTaskAPI = {
 };
 
 var AtTaskNotifier = {
+	_interval: null,
 	login_window:null,
 	workRequests: null,
 	notifications: null,
+	initialized: false,
 	
 	onLoad: function() {
-    	this.initialized = true;
-    	this.strings = document.getElementById("attasknotify-strings");
+		this.initialized = true;
+		this.updateLabelsAndIcons();
 	},
 	login: function(event) {
 	    if (event && event.button == 2) {
@@ -72,18 +74,36 @@ var AtTaskNotifier = {
 	},
 	initLogin: function(aGateway, username, password) {
 		window.AtTaskAPI.init(aGateway);
-		window.AtTaskAPI.login(username, password, function(response, fail) {
-			window.AtTaskAPI.get("user", response.userID, null, function(response, fail) {
-				if(response) {
-					window.AtTaskNotifier.login_window.setStatus("success");
-					window.AtTaskNotifier.updateLabelsAndIcons();
-				}else{
-					alert("error! " + fail);
-				}
-			});
-			window.AtTaskNotifier.fetchUserNotifications();
-			window.AtTaskNotifier.fetchWorkRequests();
-		});
+		window.AtTaskAPI.login(username, password, this.onLoginResult.bind(this));
+	},
+
+	onLoginResult: function(response, fail) {
+		if(response) {
+			this.login_window.setStatus("success");
+			this.updateLabelsAndIcons();
+			this.refresh();
+			this.startUpdateInterval();
+		}else{
+			alert("error! " + fail);
+		}
+	},
+
+	startUpdateInterval: function() {
+		if(this._interval)
+			this.stopUpdateInterval();
+			
+		var MINUTE = 60*1000;
+		this._interval = window.setInterval(this.refresh.bind(this), 0.5*MINUTE);
+	},
+	
+	stopUpdateInterval: function() {
+		if(this._interval)
+			window.clearInterval(this._interval);
+	},
+
+	refresh: function() {
+		this.fetchUserNotifications();
+		this.fetchWorkRequests();
 	},
 
 	openLoginWindow: function() {
@@ -121,6 +141,8 @@ var AtTaskNotifier = {
 			var myTab = getBrowser().addTab(url, null, null);
 			getBrowser().selectedTab = myTab;
 		}
+
+		this.startUpdateInterval(); //reset the updateInterval
 	},
 	
 	fetchUserNotifications: function() {
@@ -146,9 +168,21 @@ var AtTaskNotifier = {
 		}
 	},
 	updateLabelsAndIcons: function() {
-		document.getElementById("at-notifier-statusbar").setAttribute("logged-in", window.AtTaskAPI.sessionID);	
-		document.getElementById("at-notifier-statusbar").setAttribute('label', this.workRequests && this.workRequests.length>0 ? this.workRequests.length : 0);
-		document.getElementById("at-notifier-statusbar").setAttribute("newNotifications", this.notifications && this.notifications.length > 0);
+		document.getElementById("at-notifier-statusbar").setAttribute("logged-in", window.AtTaskAPI.sessionID != null);	
+		document.getElementById("at-notifier-statusbar").setAttribute('label', this.workRequests != null && this.workRequests.length>0 ? this.workRequests.length : '');
+		document.getElementById("at-notifier-statusbar").setAttribute("newNotifications", this.notifications != null && this.notifications.length > 0);
+		
+		if(window.AtTaskAPI.sessionID == null)
+			document.getElementById("at-notifier-statusbar").tooltipText = "Please log in."; //this.getMessage('pleaseLogIn');
+		else if(this.notifications != null && this.notifications.length > 0)
+			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.notifications.length + " new notifications.";
+		else if(this.workRequests != null && this.workRequests.length > 0)
+			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.workRequests.length + " Work Requests.";
+	},
+	getMessage: function(key) {
+		var stringz = document.getElementById("AtTaskStrings");
+		
+		return stringz.getString(key);
 	}
 };
 
