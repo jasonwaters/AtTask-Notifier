@@ -9,6 +9,9 @@
 	<stringbundle id="AtTaskStrings" src="chrome://attasknotify/locale/messages.properties"/>
 	<popupset>
 		<menupopup id="at-context-menu" onpopupshowing="AtTaskNotifier.initPopup();">
+			<menuitem label="&at-notifier-context-menu-workrequests.label;" disabled="true" accesskey="&at-notifier-context-menu-workrequests.accesskey;" oncommand="AtTaskNotifier.visitWorkRequestsURL()" id="at-context-menu-workrequests"/>
+			<menuitem label="&at-notifier-context-menu-notifications.label;" disabled="true" accesskey="&at-notifier-context-menu-notifications.accesskey;" oncommand="AtTaskNotifier.visitNotificationsURL()" id="at-context-menu-notifications"/>
+			<menuseparator id="at-context-menu-seperator"/>
 			<menuitem label="&at-notifier-context-menu-checknow.label;" disabled="true" accesskey="&at-notifier-context-menu-checknow.accesskey;" oncommand="AtTaskNotifier.checkNow()" id="at-context-menu-check-now"/>
 			<menuitem id="at-notifier-context-menu-prefs" label="&at-notifier-context-menu-prefs.label;" accesskey="&at-notifier-context-menu-prefs.accesskey;" oncommand="AtTaskNotifier.loadPrefWindow()"/>
 			<menuitem label="&at-notifier-context-menu-logout.label;" disabled="true" accesskey="&at-notifier-context-menu-logout.accesskey;" oncommand="AtTaskNotifier.logout()" id="at-context-menu-logout"/>

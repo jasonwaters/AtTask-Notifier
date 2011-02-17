@@ -141,19 +141,22 @@ var AtTaskNotifier = {
 		}
 	},
 	updateLabelsAndIcons: function() {
+		document.getElementById("at-context-menu-workrequests").setAttribute('disabled', !window.AtTaskAPI.isLoggedIn());
+		document.getElementById("at-context-menu-notifications").setAttribute('disabled', !window.AtTaskAPI.isLoggedIn());
+		
 		document.getElementById("at-context-menu-check-now").setAttribute('disabled', !window.AtTaskAPI.isLoggedIn());
 		document.getElementById("at-context-menu-logout").setAttribute('disabled', !window.AtTaskAPI.isLoggedIn());
 		
 		document.getElementById("at-notifier-statusbar").setAttribute("logged-in", window.AtTaskAPI.isLoggedIn());	
-		document.getElementById("at-notifier-statusbar").setAttribute('label', this.workRequests != null && this.workRequests.length>0 ? this.workRequests.length : '');
+		document.getElementById("at-notifier-statusbar").setAttribute('label', this.workRequests != null ? this.workRequests.length : '');
 		document.getElementById("at-notifier-statusbar").setAttribute("newNotifications", this.notifications != null && this.notifications.length > 0);
 		
 		if(window.AtTaskAPI.sessionID == null)
 			document.getElementById("at-notifier-statusbar").tooltipText = "Please log in."; //this.getMessage('pleaseLogIn');
 		else if(this.notifications != null && this.notifications.length > 0)
 			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.notifications.length + " new notification" + (this.notifications.length > 1 ? "s." : ".");
-		else if(this.workRequests != null && this.workRequests.length > 0)
-			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.workRequests.length + " Work Request"+ (this.workRequests.length > 1 ? "s." : ".");
+		else if(this.workRequests != null)
+			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.workRequests.length + " Work Request"+ (this.workRequests.length > 1 || this.workRequests.length == 0 ? "s." : ".");
 	},
 	getLocalizedString: function (aName) {
 	  var strbundle=document.getElementById("AtTaskStrings");

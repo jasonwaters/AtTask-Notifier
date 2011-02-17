@@ -41,3 +41,9 @@
 
 <!ENTITY at-notifier-context-menu-logout.label "Log Out">
 <!ENTITY at-notifier-context-menu-logout.accesskey "O">
+
+<!ENTITY at-notifier-context-menu-workrequests.label "View Work Requests">
+<!ENTITY at-notifier-context-menu-workrequests.accesskey "W">
+
+<!ENTITY at-notifier-context-menu-notifications.label "View Notifications">
+<!ENTITY at-notifier-context-menu-notifications.accesskey "N">
