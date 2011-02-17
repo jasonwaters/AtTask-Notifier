@@ -4,7 +4,7 @@
     <em:id>waters@attask.com</em:id>
     <em:type>2</em:type>
     <em:name>AtTask Notifier</em:name>
-    <em:version>0.2</em:version>
+    <em:version>0.3</em:version>
     <em:creator>Jason Waters</em:creator>
     <em:contributor>Jared Neilsen</em:contributor>
     <em:aboutURL>chrome://attasknotify/content/about.xul</em:aboutURL>
