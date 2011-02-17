@@ -7,7 +7,15 @@
 	<script src="AtTaskNotifier.js"/>
 	<script src="AtTaskPrefs.js"/>
 	<stringbundle id="AtTaskStrings" src="chrome://attasknotify/locale/messages.properties"/>
+	<popupset>
+		<menupopup id="at-context-menu" onpopupshowing="AtTaskNotifier.initPopup();">
+			<menuitem label="&at-notifier-context-menu-checknow.label;" disabled="true" accesskey="&at-notifier-context-menu-checknow.accesskey;" oncommand="AtTaskNotifier.checkNow()" id="at-context-menu-check-now"/>
+			<menuitem id="at-notifier-context-menu-prefs" label="&at-notifier-context-menu-prefs.label;" accesskey="&at-notifier-context-menu-prefs.accesskey;" oncommand="AtTaskNotifier.loadPrefWindow()"/>
+			<menuitem label="&at-notifier-context-menu-logout.label;" disabled="true" accesskey="&at-notifier-context-menu-logout.accesskey;" oncommand="AtTaskNotifier.logout()" id="at-context-menu-logout"/>
+		</menupopup>
+	</popupset>
+	
 	<statusbar id="status-bar">
-		<statusbarpanel id="at-notifier-statusbar" label="" onclick="AtTaskNotifier.login(event)" logged-in="false" newNotifications="false"  insertafter="statusbar-resizerpanel"/>
+		<statusbarpanel id="at-notifier-statusbar" context="at-context-menu" label="" onclick="AtTaskNotifier.login(event)" logged-in="false" newNotifications="false"  insertafter="statusbar-resizerpanel"/>
 	</statusbar>
 </overlay>

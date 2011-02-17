@@ -13,8 +13,9 @@ var AtTaskNotifier = {
 		var gateway = AtTaskPrefs.getCharPref(AtTaskPrefs.PREF_GATEWAY);
 		var username = AtTaskPrefs.getCharPref(AtTaskPrefs.PREF_USERNAME);
 		var rememberPassword = AtTaskPrefs.getBoolPref(AtTaskPrefs.PREF_REMEMBER);
+		var autoLogin = AtTaskPrefs.getBoolPref(AtTaskPrefs.PREFS_AUTO_LOGIN);
 		
-		if(gateway != null && gateway.length > 0 && username != null && username.length > 0 && rememberPassword) {
+		if(autoLogin && gateway != null && gateway.length > 0 && username != null && username.length > 0 && rememberPassword) {
 			var password = AtTaskPrefs.retrievePassword(username);
 			if(password != null) {
 				this.initLogin(gateway, username, password);
@@ -23,6 +24,7 @@ var AtTaskNotifier = {
 		
 	},
 	login: function(event) {
+		// on windows, right click calls this method
 	    if (event && event.button == 2) {
 	        return;
 	    }
@@ -36,6 +38,7 @@ var AtTaskNotifier = {
 			this.openLoginWindow();
 		}
 	},
+	
 	initLogin: function(aGateway, username, password) {
 		window.AtTaskAPI.init(aGateway);
 		window.AtTaskAPI.login(username, password, this.onLoginResult.bind(this));
@@ -62,7 +65,8 @@ var AtTaskNotifier = {
 			this.stopUpdateInterval();
 			
 		var MINUTE = 60*1000;
-		this._interval = window.setInterval(this.refresh.bind(this), 0.5*MINUTE);
+		var refreshInterval = AtTaskPrefs.getIntPref(AtTaskPrefs.PREF_REFRESH_INTERVAL);
+		this._interval = window.setInterval(this.refresh.bind(this), refreshInterval*MINUTE);
 	},
 	
 	stopUpdateInterval: function() {
@@ -137,20 +141,45 @@ var AtTaskNotifier = {
 		}
 	},
 	updateLabelsAndIcons: function() {
-		document.getElementById("at-notifier-statusbar").setAttribute("logged-in", window.AtTaskAPI.sessionID != null);	
+		document.getElementById("at-context-menu-check-now").setAttribute('disabled', !window.AtTaskAPI.isLoggedIn());
+		document.getElementById("at-context-menu-logout").setAttribute('disabled', !window.AtTaskAPI.isLoggedIn());
+		
+		document.getElementById("at-notifier-statusbar").setAttribute("logged-in", window.AtTaskAPI.isLoggedIn());	
 		document.getElementById("at-notifier-statusbar").setAttribute('label', this.workRequests != null && this.workRequests.length>0 ? this.workRequests.length : '');
 		document.getElementById("at-notifier-statusbar").setAttribute("newNotifications", this.notifications != null && this.notifications.length > 0);
 		
 		if(window.AtTaskAPI.sessionID == null)
 			document.getElementById("at-notifier-statusbar").tooltipText = "Please log in."; //this.getMessage('pleaseLogIn');
 		else if(this.notifications != null && this.notifications.length > 0)
-			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.notifications.length + " new notifications.";
+			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.notifications.length + " new notification" + (this.notifications.length > 1 ? "s." : ".");
 		else if(this.workRequests != null && this.workRequests.length > 0)
-			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.workRequests.length + " Work Requests.";
+			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.workRequests.length + " Work Request"+ (this.workRequests.length > 1 ? "s." : ".");
 	},
 	getLocalizedString: function (aName) {
 	  var strbundle=document.getElementById("AtTaskStrings");
 	  return strbundle.getString(aName);
+	},
+	checkNow: function() {
+		
+		this.refresh();
+	},
+	loadPrefWindow: function() {
+  		window.openDialog("chrome://attasknotify/content/options.xul", "", "centerscreen,chrome,resizable=no,dependent=yes");
+	},
+	logout: function() {
+		if(window.AtTaskAPI.isLoggedIn()) {
+			window.AtTaskAPI.logout(function(response, fail) {
+				if(response) {
+					this.notifications = null;
+					this.workRequests = null;
+					// this.login();
+				}
+				this.updateLabelsAndIcons();
+			}.bind(this));
+		}
+	},
+	initPopup: function() {
+		return true; //return true to make the popup show
 	}
 };
 

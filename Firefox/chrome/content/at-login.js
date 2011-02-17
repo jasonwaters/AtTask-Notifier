@@ -35,7 +35,7 @@ function setStatus(status, message) {
 	switch(status) {
 		case "success":
 			window.opener.AtTaskNotifier.login_window = null;
-      		setTimeout("window.close()", 1000);
+      		setTimeout("window.close()", 500);
 			break;
 		case "fail":
 			break;

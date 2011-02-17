@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://attasknotify/locale/messages.dtd">
+<prefwindow id="attasknotify-preferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&prefwindow.title;">
+  <prefpane id="pane1" label="&pane1.title;">
+    <preferences>
+      <preference id="refreshInterval" name="extensions.attasknotify.refresh.interval" type="int"/>
+	  <preference id="autoLogin" name="extensions.attasknotify.auto.login" type="bool"/>
+    </preferences>
+    <checkbox id="autoLoginPref" preference="autoLogin" label="Log in automatically" accesskey="&checkboolpref.accesskey;"/>
+    <label accesskey="&intpref.accesskey;" control="textintpref">Refresh Interval (in minutes)</label><textbox id="textintpref" preference="refreshInterval"/>
+  </prefpane>
+</prefwindow>

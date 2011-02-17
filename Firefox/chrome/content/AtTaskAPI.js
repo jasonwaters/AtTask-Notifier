@@ -16,6 +16,19 @@ var AtTaskAPI = {
 			callback(response, fail);
 		});
 	},
+	
+	logout: function(callback) {
+		if(this.sessionID) {
+			this.request("/logout", "sessionID="+this.sessionID, function(response, fail) {
+				if(response != null) {
+					window.AtTaskAPI.sessionID = null;
+					window.AtTaskAPI.userID = null;
+				}
+				callback(response,fail);
+			});
+		}
+	},
+	
 	get: function(objCode, objID, params, callback) {
 		this.request("/"+objCode+"/"+objID, params, callback);
 	},

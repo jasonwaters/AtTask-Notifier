@@ -2,6 +2,8 @@ var AtTaskPrefs = {
 	PREF_GATEWAY: 'extensions.attasknotify.gatewayURL',
 	PREF_USERNAME: 'extensions.attasknotify.username',
 	PREF_REMEMBER: 'extensions.attasknotify.remember-password',
+	PREF_REFRESH_INTERVAL: 'extensions.attasknotify.refresh.interval',
+	PREFS_AUTO_LOGIN: 'extensions.attasknotify.auto.login',
 	
 	prefBranch: null,
 	
