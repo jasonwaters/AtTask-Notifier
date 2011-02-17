@@ -1,4 +1,4 @@
-pref("extensions.attasknotify.gatewayURL", "http://localhost:8080/attask");
+pref("extensions.attasknotify.gatewayURL", "");
 pref("extensions.attasknotify.username", '');
 pref("extensions.attasknotify.remember-password", false);
 pref("extensions.attasknotify.refresh.interval", 1);

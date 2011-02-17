@@ -1,7 +1,7 @@
 <!-- Login window -->
 <!ENTITY notifier-login.title "Please Log in to AtTask">
 
-<!ENTITY notifier-login-gateway.label "AtTask URL:">
+<!ENTITY notifier-login-gateway.label "AtTask URL (e.g. yourcompany.attask-ondemand.com):">
 <!ENTITY notifier-login-username.label "Username:">
 
 <!ENTITY notifier-login-password.label "Password:">

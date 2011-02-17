@@ -2,12 +2,12 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <!DOCTYPE prefwindow SYSTEM "chrome://attasknotify/locale/messages.dtd">
 
-<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="at-notifier-login" buttons="accept,cancel" title="&notifier-login.title;" style="padding:0px;" persist="screenX screenY" onload="return onLoad();" ondialogaccept="return onAccept();">
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="at-notifier-login" buttons="accept,cancel" title="&notifier-login.title;" style="padding:10px;margin:0px;width:700px;" persist="screenX screenY" onload="return onLoad();" ondialogaccept="return onAccept();">
 
 	<script type="application/x-javascript" src="chrome://attasknotify/content/at-login.js"/>
 	<stringbundle id="strings" src="chrome://attasknotify/locale/messages.properties"/>
 	<groupbox>
-		<caption id="status" label="&notifier-login.title;"/>
+		<caption label="&notifier-login.title;"/>
 		<grid style="padding:10px;">
 		    <columns>
 		      <column />
@@ -38,6 +38,7 @@
 		      </row>
 		    </rows>
 		  </grid>
+		<description id="status" style="text-align:center;" value=""/>
 	</groupbox>
 	  <hbox>
 	    <spacer flex="1"/>
