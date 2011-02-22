@@ -2,7 +2,6 @@
 <?xml-stylesheet href="chrome://attasknotify/skin/at-notifier.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://attasknotify/locale/messages.dtd">
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="attasknotify-overlay">
-	<script src="globals.js"/>
 	<script src="AtTaskAPI.js"/>
 	<script src="AtTaskNotifier.js"/>
 	<script src="AtTaskPrefs.js"/>

@@ -1,5 +1,5 @@
 var AtTaskNotifier = {
-	_interval: null,
+	_timeout: null,
 	login_window:null,
 	workRequests: null,
 	notifications: null,
@@ -41,17 +41,16 @@ var AtTaskNotifier = {
 	
 	initLogin: function(aGateway, username, password) {
 		window.AtTaskAPI.init(aGateway);
-		window.AtTaskAPI.login(username, password, this.onLoginResult.bind(this));
+		window.AtTaskAPI.login(username, password, this.onLoginResult);
 	},
 
 	onLoginResult: function(response, fail) {
 		if(response) {
-			this.setLoginStatus("success", "Logged in.");
-			this.updateLabelsAndIcons();
-			this.refresh();
-			this.startUpdateInterval();
+			window.AtTaskNotifier.setLoginStatus("success", "Logged in.");
+			window.AtTaskNotifier.updateLabelsAndIcons();
+			window.AtTaskNotifier.refresh();
 		}else{
-			this.setLoginStatus("fail", "Unable to log in.");
+			window.AtTaskNotifier.setLoginStatus("fail", "Unable to log in.");
 		}
 	},
 	
@@ -61,22 +60,25 @@ var AtTaskNotifier = {
 	},
 
 	startUpdateInterval: function() {
-		if(this._interval)
-			this.stopUpdateInterval();
-			
+		this.clearUpdateInterval();
 		var MINUTE = 60*1000;
-		var refreshInterval = AtTaskPrefs.getIntPref(AtTaskPrefs.PREF_REFRESH_INTERVAL);
-		this._interval = window.setInterval(this.refresh.bind(this), refreshInterval*MINUTE);
+		var refreshInterval = AtTaskPrefs.getIntPref(AtTaskPrefs.PREF_REFRESH_INTERVAL) * MINUTE;
+
+		this._timeout = window.setTimeout(function() {
+			window.AtTaskNotifier.refresh();
+		}, refreshInterval);
 	},
 	
-	stopUpdateInterval: function() {
-		if(this._interval)
-			window.clearInterval(this._interval);
+	clearUpdateInterval: function() {
+		if(this._timeout != null) {
+			window.clearTimeout(this._timeout);
+		}
 	},
 
 	refresh: function() {
-		this.fetchUserNotifications();
-		this.fetchWorkRequests();
+		window.AtTaskNotifier.fetchUserNotifications();
+		window.AtTaskNotifier.fetchWorkRequests();
+		window.AtTaskNotifier.startUpdateInterval(); //this needs to be called every time refresh is called because it's a timeout
 	},
 
 	openLoginWindow: function() {
@@ -120,24 +122,24 @@ var AtTaskNotifier = {
 	
 	fetchUserNotifications: function() {
 		//http://localhost:8080/attask/api/notifications/myUnreadNotifications?fields=*,note:*
-		window.AtTaskAPI.get("notifications", "myUnreadNotifications", null, this.onUserNotificationsReceived.bind(this));
+		window.AtTaskAPI.get("notifications", "myUnreadNotifications", null, this.onUserNotificationsReceived);
 	},
 	
 	onUserNotificationsReceived: function(response, fail) {
 		if(response) {
-			this.notifications = response;
-			this.updateLabelsAndIcons();
+			window.AtTaskNotifier.notifications = response;
+			window.AtTaskNotifier.updateLabelsAndIcons();
 		}
 	},
 	
 	fetchWorkRequests: function() {
 		//http://localhost:8080/attask/api/work/workRequests
-		window.AtTaskAPI.get("work", "workRequests",null, this.onWorkRequestsReceived.bind(this));
+		window.AtTaskAPI.get("work", "workRequests",null, this.onWorkRequestsReceived);
 	},
 	onWorkRequestsReceived: function(response, fail) {
 		if(response) {
-			this.workRequests = response;
-			this.updateLabelsAndIcons();
+			window.AtTaskNotifier.workRequests = response;
+			window.AtTaskNotifier.updateLabelsAndIcons();
 		}
 	},
 	updateLabelsAndIcons: function() {
@@ -163,7 +165,6 @@ var AtTaskNotifier = {
 	  return strbundle.getString(aName);
 	},
 	checkNow: function() {
-		
 		this.refresh();
 	},
 	loadPrefWindow: function() {
@@ -171,14 +172,14 @@ var AtTaskNotifier = {
 	},
 	logout: function() {
 		if(window.AtTaskAPI.isLoggedIn()) {
+			this.clearUpdateInterval();
 			window.AtTaskAPI.logout(function(response, fail) {
 				if(response) {
-					this.notifications = null;
-					this.workRequests = null;
-					// this.login();
+					window.AtTaskNotifier.notifications = null;
+					window.AtTaskNotifier.workRequests = null;
 				}
-				this.updateLabelsAndIcons();
-			}.bind(this));
+				window.AtTaskNotifier.updateLabelsAndIcons();
+			});
 		}
 	},
 	initPopup: function() {
