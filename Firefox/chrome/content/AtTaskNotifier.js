@@ -153,12 +153,14 @@ var AtTaskNotifier = {
 		document.getElementById("at-notifier-statusbar").setAttribute('label', this.workRequests != null ? this.workRequests.length : '');
 		document.getElementById("at-notifier-statusbar").setAttribute("newNotifications", this.notifications != null && this.notifications.length > 0);
 		
-		if(window.AtTaskAPI.sessionID == null)
-			document.getElementById("at-notifier-statusbar").tooltipText = "Please log in."; //this.getMessage('pleaseLogIn');
+		if(!window.AtTaskAPI.isLoggedIn())
+			document.getElementById("at-notifier-statusbar").tooltipText = "Please log in.";
 		else if(this.notifications != null && this.notifications.length > 0)
 			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.notifications.length + " new notification" + (this.notifications.length > 1 ? "s." : ".");
 		else if(this.workRequests != null)
 			document.getElementById("at-notifier-statusbar").tooltipText = "You have " + this.workRequests.length + " Work Request"+ (this.workRequests.length > 1 || this.workRequests.length == 0 ? "s." : ".");
+		else
+			document.getElementById("at-notifier-statusbar").tooltipText = "Logged in.";
 	},
 	getLocalizedString: function (aName) {
 	  var strbundle=document.getElementById("AtTaskStrings");

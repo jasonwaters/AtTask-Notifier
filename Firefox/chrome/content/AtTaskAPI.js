@@ -3,6 +3,8 @@ var AtTaskAPI = {
 	userID: null,
 	init: function(aGateway) {
 		this.gateway = aGateway;
+		this.sessionID = null;
+		this.userID = null;
 	},
 	isLoggedIn: function() {
 		return this.sessionID != null;
@@ -37,7 +39,7 @@ var AtTaskAPI = {
 	
 		var method = params == null || params.length == 0 ? "GET" : "POST";
 
-		req.open(method, this.gateway + '/api'+path, true);
+		req.open(method, this.gateway + '/api-internal'+path, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.onload = function(evt) {
 			var response = JSON.parse(evt.target.responseText).data;
