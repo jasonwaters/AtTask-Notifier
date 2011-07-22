@@ -4,6 +4,7 @@ var AtTaskNotifier = {
 	workRequests: null,
 	notifications: null,
 	initialized: false,
+	user: null,
 	
 	onLoad: function() {
 		this.initialized = true;
@@ -41,10 +42,21 @@ var AtTaskNotifier = {
 	
 	initLogin: function(aGateway, username, password) {
 		window.AtTaskAPI.init(aGateway);
-		window.AtTaskAPI.login(username, password, this.onLoginResult);
+		
+		//var bug = Firebug.Console;
+
+		window.AtTaskAPI.login(username, password, function(response, fail) {
+			window.AtTaskNotifier.onLoginResult(response,fail);
+			// window.AtTaskAPI.get("user", response.userID, 'fields=defaultInterface', function(response, fail) {
+			window.AtTaskAPI.getUser(response.userID, function(response,fail) {
+				window.AtTaskNotifier.user = response;
+			});
+		});
 	},
 
 	onLoginResult: function(response, fail) {
+		window.AtTaskNotifier.user = response;
+		
 		if(response) {
 			window.AtTaskNotifier.setLoginStatus("success", "Logged in.");
 			window.AtTaskNotifier.updateLabelsAndIcons();
@@ -86,7 +98,23 @@ var AtTaskNotifier = {
 	},
 	
 	visitNotificationsURL: function() {
-		var url = window.AtTaskAPI.gateway + "/userMessages.cmd?jsessionid="+window.AtTaskAPI.sessionID+"&ID="+window.AtTaskAPI.userID;
+		var url = window.AtTaskAPI.gateway;
+		
+		switch(window.AtTaskNotifier.user.defaultInterface) {
+			case(1): //Project Management Home
+				url += "/userMessages.cmd?jsessionid="+window.AtTaskAPI.sessionID+"&ID="+window.AtTaskAPI.userID;
+				break;
+			case(2): //TeamHome
+				//http://localhost:8080/attask/teamHome.cmd?jsessionid=203187340843-6lc99l1657irc4e#/notifications
+				url += "/teamHome.cmd?jsessionid="+window.AtTaskAPI.sessionID+"#/notifications";
+				break;
+			case(3): //TeamHome 2.0 (beta)
+				//http://localhost:8080/user/notifications
+				url += "/user/notifications";
+				break;
+		}
+		
+		//Firebug.Console.log(url);
 		this.loadURL(url);
 		
 		this.notifications = null;

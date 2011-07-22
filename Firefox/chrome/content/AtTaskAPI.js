@@ -34,13 +34,22 @@ var AtTaskAPI = {
 	get: function(objCode, objID, params, callback) {
 		this.request("/"+objCode+"/"+objID, params, callback);
 	},
+	
+	getUser: function(userID, callback) {
+		//http://localhost:8080/attask/api-internal/user/4d8a18ec0000112104073ed3df530d1a?fields=defaultInterface
+		this.request('/user/'+userID+'?fields=defaultInterface',null,callback);
+	},
+	
 	request: function(path, params, callback) {
 		var req = new XMLHttpRequest();
 	
 		var method = params == null || params.length == 0 ? "GET" : "POST";
 
-		req.open(method, this.gateway + '/api-internal'+path, true);
+		//Firebug.Console.log(this.gateway + '/api-internal/v1.0'+path);
+
+		req.open(method, this.gateway + '/api-internal/v1.0'+path, true);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		
 		req.onload = function(evt) {
 			var response = JSON.parse(evt.target.responseText).data;
 			callback(response);
