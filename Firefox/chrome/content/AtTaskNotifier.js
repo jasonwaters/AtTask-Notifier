@@ -110,7 +110,8 @@ var AtTaskNotifier = {
 				break;
 			case(3): //TeamHome 2.0 (beta)
 				//http://localhost:8080/user/notifications
-				url += "/user/notifications";
+				
+				url = url.replace('/attask', '') + "/user/notifications";
 				break;
 		}
 		
