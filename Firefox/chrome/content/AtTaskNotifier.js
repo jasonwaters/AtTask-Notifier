@@ -105,9 +105,6 @@ var AtTaskNotifier = {
 				url += "/userMessages.cmd?jsessionid="+window.AtTaskAPI.sessionID+"&ID="+window.AtTaskAPI.userID;
 				break;
 			case(2): //TeamHome
-				//http://localhost:8080/attask/teamHome.cmd?jsessionid=203187340843-6lc99l1657irc4e#/notifications
-				url += "/teamHome.cmd?jsessionid="+window.AtTaskAPI.sessionID+"#/notifications";
-				break;
 			case(3): //TeamHome 2.0 (beta)
 				//http://localhost:8080/user/notifications
 				
@@ -124,7 +121,7 @@ var AtTaskNotifier = {
 	
 	visitWorkRequestsURL: function() {
 		//http://localhost:8080/attask/teamHome.cmd;jsessionid=ED6E098F9434B089AD3CFE17FB48EE32#/home/workRequests
-		var url = window.AtTaskAPI.gateway + "/teamHome.cmd?jsessionid="+window.AtTaskAPI.sessionID+"#/home/workRequests";
+		var url = window.AtTaskAPI.gateway.replace('/attask', '') + "/myWork";
 		this.loadURL(url);
 	},
 
