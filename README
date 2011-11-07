@@ -5,5 +5,3 @@ This is the project repository for an innovation week project by Jason Waters an
 If you use AtTask (www.attask.com), then this extension is indispensable.  It unobtrusively indicates when you have notifications to review.  It also displays the number of Work Requests assigned to you, so you will know immediately if something requires your attention.
 
 A little AtTask icon resides in the status bar at the bottom of the browser with a number to the right of it.  The number represents how many work requests you have assigned to you.  If you click the icon or number, your browser will be directed to your work requests within AtTask.  When you have notifications, the icon changes and clicking it takes you to the notifications area within AtTask.
-
-hi
